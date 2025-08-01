@@ -9,8 +9,6 @@ import { Amplify } from 'aws-amplify';
 import { Authenticator, Button, View, Image, useTheme, Text, Heading, useAuthenticator } from '@aws-amplify/ui-react';
 import logo from './tplogo.jpg'; 
 
-import { Storage } from 'aws-amplify/storage';
-
 import {
   ThemeStyle,
   createTheme,
@@ -19,7 +17,7 @@ import {
 
 Amplify.configure(config);
 
-const downloadSelectedFiles = async (selectedKeys) => {
+const downloadSelectedFiles = async (selectedKeys: string[]) => {
   for (const key of selectedKeys) {
     const result = await Storage.get(key, { download: true });
     const blob = await result.Body.blob();
