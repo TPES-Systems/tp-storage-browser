@@ -9,7 +9,7 @@ import { Amplify } from 'aws-amplify';
 import { Authenticator, Button, View, Image, useTheme, Text, Heading, useAuthenticator } from '@aws-amplify/ui-react';
 import logo from './tplogo.jpg'; 
 
-import { Storage } from 'aws-amplify';
+import { Storage } from 'aws-amplify/storage';
 
 import {
   ThemeStyle,
