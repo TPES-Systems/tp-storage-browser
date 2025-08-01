@@ -17,7 +17,7 @@ import {
 
 Amplify.configure(config);
 
-import { Storage } from 'aws-amplify/storage';
+import { Storage } from 'aws-amplify';
 
 const downloadSelectedFiles = async (selectedFiles) => {
   for (const file of selectedFiles) {
