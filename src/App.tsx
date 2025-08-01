@@ -9,6 +9,8 @@ import { Amplify } from 'aws-amplify';
 import { Authenticator, Button, View, Image, useTheme, Text, Heading, useAuthenticator } from '@aws-amplify/ui-react';
 import logo from './tplogo.jpg'; 
 
+import { Storage } from 'aws-amplify';
+
 import {
   ThemeStyle,
   createTheme,
@@ -16,6 +18,20 @@ import {
 } from '@aws-amplify/ui-react/server';
 
 Amplify.configure(config);
+
+const downloadSelectedFiles = async (selectedKeys) => {
+  for (const key of selectedKeys) {
+    const result = await Storage.get(key, { download: true });
+    const blob = await result.Body.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = key.split('/').pop();
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+};
 
 const storageBrowserTheme = defineComponentTheme({
   name: 'storage-browser',
@@ -119,6 +135,11 @@ function App() {
           <View backgroundColor="background.tertiary" {...theme.containerProps()}>
             <StorageBrowser />
             <ThemeStyle theme={theme} />
+            
+            <button onClick={downloadSelectedFiles} style={{ marginLeft: '1rem' }}>
+              Descargar seleccionados
+            </button>
+
           </View>
         </>
       )}
