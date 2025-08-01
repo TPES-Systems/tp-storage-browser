@@ -17,19 +17,21 @@ import {
 
 Amplify.configure(config);
 
-const downloadSelectedFiles = async (selectedKeys: string[]) => {
-  for (const key of selectedKeys) {
-    const result = await Storage.get(key, { download: true });
-    const blob = await result.Body.blob();
-    const url = window.URL.createObjectURL(blob);
+import { Storage } from 'aws-amplify';
+
+const downloadSelectedFiles = async (selectedFiles) => {
+  for (const file of selectedFiles) {
+    const result = await Storage.get(file.key, { download: true });
+    const url = URL.createObjectURL(result.Body);
     const link = document.createElement('a');
     link.href = url;
-    link.download = key.split('/').pop();
+    link.download = file.key.split('/').pop();
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   }
 };
+
 
 const storageBrowserTheme = defineComponentTheme({
   name: 'storage-browser',
@@ -134,7 +136,11 @@ function App() {
             <StorageBrowser />
             <ThemeStyle theme={theme} />
             
-            <button onClick={downloadSelectedFiles} style={{ marginLeft: '1rem' }}>
+            //<button onClick={downloadSelectedFiles} style={{ marginLeft: '1rem' }}>
+            //  Descargar seleccionados
+            //</button>
+            
+            <button onClick={() => downloadSelectedFiles(selectedFiles)}>
               Descargar seleccionados
             </button>
 
