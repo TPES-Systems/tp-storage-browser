@@ -279,6 +279,11 @@ function App() {
             
             <StorageBrowser />
             <ThemeStyle theme={theme} />
+
+
+      </div>
+
+      
           </View>
         </>
       )}
