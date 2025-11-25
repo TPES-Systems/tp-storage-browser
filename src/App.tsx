@@ -17,32 +17,6 @@ import {
 
 Amplify.configure(config);
 
-const downloadSelectedFiles = async () => {
-  for (const file of selectedFiles) {
-    try {
-      // Descargar usando Amplify v6
-      const downloadResult = await downloadData({ key: file.key }).result;
-      const blob = await downloadResult.body.blob();
-      
-      // Crear enlace temporal
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = file.key.split('/').pop() || 'download';
-      
-      // Descargar
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Limpiar
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error(`Error descargando ${file.key}:`, error);
-    }
-  }
-};
-
 interface S3File {
   key: string;
   lastModified?: Date;
@@ -161,6 +135,28 @@ function App() {
 */
 
 function App() {
+  const [selectedFiles, setSelectedFiles] = useState<S3File[]>([]);
+  const downloadSelectedFiles = async (files: S3File[]) => {
+    for (const file of files) {
+      try {
+        const result = await downloadData({ key: file.key }).result;
+        const blob = await result.body.blob();
+        
+        // Crear enlace de descarga
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = file.key.split('/').pop() || 'download';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error(`Error descargando ${file.key}:`, error);
+      }
+    }
+  };
+  
   return (
     <Authenticator hideSignUp={true} formFields={formFields} components={components}>
       {({ signOut, user }) => (
@@ -171,7 +167,7 @@ function App() {
           </div>
           <View backgroundColor="background.tertiary" {...theme.containerProps()}>
             <StorageBrowser
-              onSelect={(files) => setSelectedFiles(files as S3File[])}
+              onSelect={(files) => setSelectedFiles(files)}
               displayText={{
                 getListViewTableColumnHeader: (column) => {
                   const headers: Record<string, string> = {
