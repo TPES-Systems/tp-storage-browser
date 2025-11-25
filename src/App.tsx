@@ -17,6 +17,32 @@ import {
 
 Amplify.configure(config);
 
+const downloadSelectedFiles = async () => {
+  for (const file of selectedFiles) {
+    try {
+      // Descargar usando Amplify v6
+      const downloadResult = await downloadData({ key: file.key }).result;
+      const blob = await downloadResult.body.blob();
+      
+      // Crear enlace temporal
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = file.key.split('/').pop() || 'download';
+      
+      // Descargar
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Limpiar
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(`Error descargando ${file.key}:`, error);
+    }
+  }
+};
+
 const storageBrowserTheme = defineComponentTheme({
   name: 'storage-browser',
   theme: (tokens) => {
@@ -106,7 +132,7 @@ const formFields = {
   }
 };
 
-
+/*
 function App() {
   return (
     <Authenticator hideSignUp={true} formFields={formFields} components={components}>
@@ -118,6 +144,38 @@ function App() {
           </div>
           <View backgroundColor="background.tertiary" {...theme.containerProps()}>
             <StorageBrowser />
+            <ThemeStyle theme={theme} />
+          </View>
+        </>
+      )}
+    </Authenticator>
+  );
+}
+*/
+
+function App() {
+  return (
+    <Authenticator hideSignUp={true} formFields={formFields} components={components}>
+      {({ signOut, user }) => (
+        <>
+          <div className="header">
+            <h1>{`Bienvenido ${user?.signInDetails?.loginId}`}</h1>
+            <Button className="sign-out-button" onClick={signOut}>Sign out</Button>
+          </div>
+          <View backgroundColor="background.tertiary" {...theme.containerProps()}>
+            <StorageBrowser
+              onSelect={(files) => setSelectedFiles(files as S3File[])}
+              displayText={{
+                getListViewTableColumnHeader: (column) => {
+                  const headers: Record<string, string> = {
+                    name: 'Nombre',
+                    size: 'Tamaño',
+                    lastModified: 'Última modificación',
+                  };
+                  return headers[column] || column;
+                },
+              }}
+            />
             <ThemeStyle theme={theme} />
           </View>
         </>
