@@ -135,6 +135,7 @@ import { Amplify } from 'aws-amplify';
 import { downloadData } from 'aws-amplify/storage';
 import { StorageBrowser } from '@aws-amplify/ui-react-storage';
 import '@aws-amplify/ui-react-storage/styles.css';
+import config from '../amplify_outputs.json';
 //import amplifyConfig from './amplifyconfiguration.json';
 
 // Configurar Amplify
