@@ -135,10 +135,10 @@ import { Amplify } from 'aws-amplify';
 import { downloadData } from 'aws-amplify/storage';
 import { StorageBrowser } from '@aws-amplify/ui-react-storage';
 import '@aws-amplify/ui-react-storage/styles.css';
-import amplifyConfig from './amplifyconfiguration.json';
+//import amplifyConfig from './amplifyconfiguration.json';
 
 // Configurar Amplify
-Amplify.configure(amplifyConfig);
+Amplify.configure(config);
 
 // Definir tipos para los archivos de S3
 interface S3File {
