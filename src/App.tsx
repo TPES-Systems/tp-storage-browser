@@ -8,7 +8,7 @@ import config from '../amplify_outputs.json';
 import { Amplify } from 'aws-amplify';
 import { Authenticator, Button, View, Image, useTheme, Text, Heading, useAuthenticator } from '@aws-amplify/ui-react';
 import logo from './tplogo.jpg'; 
-
+import { downloadData } from 'aws-amplify/storage';
 import {
   ThemeStyle,
   createTheme,
@@ -41,6 +41,13 @@ const downloadSelectedFiles = async () => {
       console.error(`Error descargando ${file.key}:`, error);
     }
   }
+};
+
+interface S3File {
+  key: string;
+  lastModified?: Date;
+  size?: number;
+  eTag?: string;
 };
 
 const storageBrowserTheme = defineComponentTheme({
@@ -176,6 +183,11 @@ function App() {
                 },
               }}
             />
+            {selectedFiles.length > 0 && (
+              <button onClick={() => downloadSelectedFiles(selectedFiles)}>
+                Descargar {selectedFiles.length} archivo(s)
+              </button>
+            )}
             <ThemeStyle theme={theme} />
           </View>
         </>
