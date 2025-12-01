@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   createAmplifyAuthAdapter,
   createStorageBrowser,
@@ -167,17 +168,7 @@ function App() {
           </div>
           <View backgroundColor="background.tertiary" {...theme.containerProps()}>
             <StorageBrowser
-              onSelect={(files) => setSelectedFiles(files)}
-              displayText={{
-                getListViewTableColumnHeader: (column) => {
-                  const headers: Record<string, string> = {
-                    name: 'Nombre',
-                    size: 'Tamaño',
-                    lastModified: 'Última modificación',
-                  };
-                  return headers[column] || column;
-                },
-              }}
+              onSelect={(files: S3File[]) => setSelectedFiles(files)}
             />
             {selectedFiles.length > 0 && (
               <button onClick={() => downloadSelectedFiles(selectedFiles)}>
