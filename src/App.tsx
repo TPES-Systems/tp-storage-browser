@@ -8,7 +8,7 @@ import './App.css';
 import config from '../amplify_outputs.json';
 import { Amplify } from 'aws-amplify';
 import { Authenticator, Button, View, Image, useTheme, Text, Heading, useAuthenticator } from '@aws-amplify/ui-react';
-import logo from './tplogo.jpg'; 
+import logo from './tplogo.jpg';
 import { downloadData } from 'aws-amplify/storage';
 import {
   ThemeStyle,
@@ -23,7 +23,7 @@ interface S3File {
   lastModified?: Date;
   size?: number;
   eTag?: string;
-};
+}
 
 const storageBrowserTheme = defineComponentTheme({
   name: 'storage-browser',
@@ -32,7 +32,24 @@ const storageBrowserTheme = defineComponentTheme({
       _element: {
         controls: {
           flexDirection: 'row-reverse',
-          backgroundColor: tokens.colors.background.primary,
+          backgroundColor: 'rgba(255, 255, 255, 0.00)',
+          fontSize: 'medium',
+          fontFamily: 'Calibri, sans-serif',
+          caretColor: 'rgb(0, 0, 0)',
+          color: 'rgb(0, 0, 0)',
+          fontStyle: 'normal',
+          fontVariantCaps: 'normal',
+          fontWeight: 400,
+          letterSpacing: 'normal',
+          orphans: 'auto',
+          textAlign: 'start',
+          textIndent: 0,
+          textTransform: 'none',
+          whiteSpace: 'normal',
+          widows: 'auto',
+          wordSpacing: 0,
+          WebkitTextStrokeWidth: 0,
+          textDecoration: 'none',
           padding: tokens.space.small,
           borderRadius: tokens.radii.small,
         },
@@ -46,7 +63,7 @@ const storageBrowserTheme = defineComponentTheme({
 
 const theme = createTheme({
   name: 'my-theme',
-  primaryColor: 'purple',
+  primaryColor: 'rgba(255, 255, 255, 0.00)',
   components: [storageBrowserTheme],
 });
 
@@ -68,7 +85,6 @@ const components = {
   },
   Footer() {
     const { tokens } = useTheme();
-
     return (
       <View textAlign="center" padding={tokens.space.large}>
         <Text color={tokens.colors.neutral[80]}>
@@ -81,7 +97,10 @@ const components = {
     Header() {
       const { tokens } = useTheme();
       return (
-        <Heading padding={`${tokens.space.xl} 0 0 ${tokens.space.xl}`} level={3}>
+        <Heading
+          padding={`${tokens.space.xl} 0 0 ${tokens.space.xl}`}
+          level={3}
+        >
           Sign in to your account
         </Heading>
       );
@@ -114,29 +133,9 @@ const formFields = {
   }
 };
 
-/*
-function App() {
-  return (
-    <Authenticator hideSignUp={true} formFields={formFields} components={components}>
-      {({ signOut, user }) => (
-        <>
-          <div className="header">
-            <h1>{`Bienvenido ${user?.signInDetails?.loginId}`}</h1>
-            <Button className="sign-out-button" onClick={signOut}>Sign out</Button>
-          </div>
-          <View backgroundColor="background.tertiary" {...theme.containerProps()}>
-            <StorageBrowser />
-            <ThemeStyle theme={theme} />
-          </View>
-        </>
-      )}
-    </Authenticator>
-  );
-}
-*/
-
 function App() {
   const [selectedFiles, setSelectedFiles] = useState<S3File[]>([]);
+
   const downloadSelectedFiles = async (files: S3File[]) => {
     for (const file of files) {
       try {
@@ -157,7 +156,7 @@ function App() {
       }
     }
   };
-  
+
   return (
     <Authenticator hideSignUp={true} formFields={formFields} components={components}>
       {({ signOut, user }) => (
